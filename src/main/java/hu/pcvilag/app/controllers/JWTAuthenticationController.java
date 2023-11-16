@@ -1,8 +1,5 @@
 package hu.pcvilag.app.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import hu.pcvilag.app.models.JwtRequest;
 import hu.pcvilag.app.models.JwtResponse;
 import hu.pcvilag.app.service.CustomUserDetailsService;
@@ -14,13 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class JWTAuthenticationController {
-
-    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationController.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -38,10 +32,6 @@ public class JWTAuthenticationController {
         );
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String token = jwtTokenUtil.generateToken(userDetails);
-
-        logger.info("LOGIN: {} ", userDetails);
-        logger.info("TOKEN: {} ", token);
-
         return ResponseEntity.ok(new JwtResponse(token));
     }
 }

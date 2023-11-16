@@ -16,7 +16,7 @@ public class UserService {
     private RoleRepository roleRepository;
 
     public UserEntity registerNewUser(UserEntity userEntity) {
-        RoleEntity userRole = roleRepository.findById(1);
+        RoleEntity userRole = roleRepository.findByName("ROLE_USER");
         userEntity.setRole(userRole);
         return userRepository.save(userEntity);
     }

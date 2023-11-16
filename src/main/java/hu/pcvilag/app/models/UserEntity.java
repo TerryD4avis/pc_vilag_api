@@ -1,6 +1,5 @@
 package hu.pcvilag.app.models;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +18,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "secu_user_role",
             joinColumns = @JoinColumn(name = "user_id"),

@@ -20,4 +20,9 @@ public class UserService {
         userEntity.setRole(userRole);
         return userRepository.save(userEntity);
     }
+
+    public boolean usernameExists(String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
 }

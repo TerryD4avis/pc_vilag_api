@@ -17,6 +17,7 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")

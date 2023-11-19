@@ -3,6 +3,7 @@ package hu.pcvilag.app.filters;
 import hu.pcvilag.app.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,11 +13,14 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.crypto.SecretKey;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -38,7 +42,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7);
             try {
-                username = Jwts.parser().setSigningKey("kolbasz").parseClaimsJws(jwt).getBody().getSubject();
+                byte[] keyBytes = "kolbasz".getBytes(StandardCharsets.UTF_8);
+                SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+                username = String.valueOf(Jwts.parser().verifyWith(key).build().parseSignedClaims(jwt));
             } catch (ExpiredJwtException e) {
                 logger.error(e);
             }
